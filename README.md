@@ -1,5 +1,5 @@
 # HTML PJAX
-之前使用jquery.pjax.js在直接请求html页面的时候会对html页面内容进行限制。若出现<html>标签则会跳转页面，无法实现局部刷新。  
+之前使用jquery.pjax.js在直接请求html页面的时候会对html页面内容进行限制。若出现html标签则会跳转页面，无法实现局部刷新。  
 htmlpjax针对诸如问题进行了修正，可以正常请求html页面  
 
 ## 使用方法

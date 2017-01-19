@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>示例</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="" rel="stylesheet">
+</head>
+
+<body>
+    <button class='page' data-target='main'>main</button>
+    <button class='page' data-target='page1'>page1</button>
+    <button class='page' data-target='page2'>page2</button>
+    <button class='page' data-target='page3'>page3</button>
+    <div id="mainContent">
+        <div>
+            <!DOCTYPE html>
+            <html>
+
+            <head>
+                <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+                <meta name="renderer" content="webkit">
+                <meta content="width=device-width,initial-scale=1.0,maximum-scale=1, user-scalable=no" name="viewport">
+                <meta content="yes" name="apple-mobile-web-app-capable">
+                <meta content="yes" name="apple-touch-fullscreen">
+                <meta content="telephone=no,email=no" name="format-detection">
+                <title>Examples</title>
+                <meta name="description" content="">
+                <meta name="keywords" content="">
+                <link href="" rel="stylesheet">
+            </head>
+
+            <body>
+                我是index.html
+
+            </html>
+        </div>
+    </div>
+    <script src='jquery.min.js'></script>
+    <script src="../dest/jquery.htmlpjax.min.js"></script>
+    <script type="text/javascript">
+    $.htmlPjax({
+        selector: '.page',
+        container: '#mainContent',
+        hash: 'main',
+        indexPage: 'index.html',
+        paths: './page', //相对于index.html 的路径
+    })
+    </script>
+    </body>
+
+</html>

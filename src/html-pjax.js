@@ -6,7 +6,8 @@
  */
 
 (function(window, $, undefined) {
-    var originUrl = window.location.href,
+    var originUrl = window.location.href, //最初访问的url
+        //默认配置
         config = {
             selector: 'a', //默认事件选择器
             container: 'body', //默认内容选择器
@@ -17,6 +18,7 @@
         },
 
         pjax = {
+            //处理刷新事件
             refreshHandle: function() {
                 window.onbeforeunload = function(event) {
                     alert("===onbeforeunload===");
@@ -28,8 +30,9 @@
                     }
                 }
             },
+            //刷新之后跳转至首页
             refreshToIndex: function(options) {
-                if ($("#"+options.hash)) {
+                if ($("#" + options.hash)) {
                     var url = ''
                     if (originUrl.indexOf('.html') >= 0) {
                         url = originUrl.replace(originUrl.substring(originUrl.indexOf('#')), '#' + options.hash);
@@ -39,8 +42,11 @@
                     }
                 }
             },
+            //初始化
             init: function(options) {
                 var self = this;
+
+                //监听点击事件
                 $(options.selector || options.selector).click(function() {
                     var target = $(this).data('target'),
                         originHash = window.location.href.split('#')[1] || options.hash || config.hash,
@@ -76,7 +82,8 @@
                             url = originUrl.replace(tmp, '#' + target);
                         }
                     }
-
+                    
+                    //记录压入历史栈
                     window.history.pushState({
                         origin: originHash
                     }, null, url);
@@ -85,6 +92,7 @@
                     self.ajaxHandle(url.replace(html, '/' + options.paths + '/' + target + '.html'), options.container);
                 })
 
+                //popstate事件
                 window.onpopstate = function(event) {
                     var urlProcess = '',
                         currentUrl = window.location.href,
@@ -107,6 +115,7 @@
                     self.ajaxHandle(urlProcess, options.container);
                 }
             },
+            //发起ajax请求
             ajaxHandle: function(url, container) {
                 $.ajax({
                         url: url,
@@ -124,6 +133,8 @@
                     })
                     .always(function() {});
             },
+
+            //过滤问号
             queryFilter: function(currentUrl) {
                 var queryIndex = '',
                     repStr = '',
@@ -141,25 +152,29 @@
             }
         };
 
+    //amd
     if (typeof define === 'function' && define.amd) {
         define([], function() {
             return pjax;
         });
+        //cmd
     } else if (typeof module === 'object' && typeof exports === 'object') {
         module.exports = pjax;
+        //jquery
     } else if (jQuery) {
         $.extend({
-            htmlPjax: function(options) {
-                options.refreshtoIndex = options.refreshtoIndex || true;
-                if (!options.refreshtoIndex && !config.refreshtoIndex) {
-                    pjax.refreshHandle();
-                } else { //默认刷新回到首页
-                    pjax.refreshToIndex(options);
-                }
-                pjax.init(options);
+                htmlPjax: function(options) {
+                    options.refreshtoIndex = options.refreshtoIndex || true;
+                    if (!options.refreshtoIndex && !config.refreshtoIndex) {
+                        pjax.refreshHandle();
+                    } else { //默认刷新回到首页
+                        pjax.refreshToIndex(options);
+                    }
+                    pjax.init(options);
 
-            }
-        })
+                }
+            })
+            //window全局变量
     } else {
         window.htmlPajx = pjax;
     }

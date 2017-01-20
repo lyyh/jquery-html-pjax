@@ -20,18 +20,24 @@
         pjax = {
             //处理刷新事件
             refreshHandle: function() {
-                window.onbeforeunload = function(event) {
-                    alert("===onbeforeunload===");
-                    if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {
-                        alert("你关闭了浏览器");
-                    } else {
+                var self = this;
+                onRefresh(function() {
 
-                        alert("你正在刷新页面");
-                    }
-                }
+                })
             },
             //刷新之后跳转至首页
             refreshToIndex: function(options) {
+                var self = this;
+                self.onRefresh(function() {
+                    var originHash = null,
+                        url = window.location.href;
+
+                    //记录压入历史栈
+                    window.history.pushState({
+                        origin: originHash
+                    }, null, url);
+                });
+
                 if ($("#" + options.hash)) {
                     var url = ''
                     if (originUrl.indexOf('.html') >= 0) {
@@ -41,6 +47,16 @@
                         window.location.href = originUrl + options.indexPage + '#' + options.hash;
                     }
                 }
+            },
+            //刷新事件
+            onRefresh: function(fn) {
+                window.onbeforeunload = function(event) {
+                        //关闭浏览器
+                        if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {
+                        } else { //刷新了页面
+                            fn();
+                        }
+                    }
             },
             //初始化
             init: function(options) {
@@ -82,7 +98,7 @@
                             url = originUrl.replace(tmp, '#' + target);
                         }
                     }
-                    
+
                     //记录压入历史栈
                     window.history.pushState({
                         origin: originHash
@@ -171,7 +187,6 @@
                         pjax.refreshToIndex(options);
                     }
                     pjax.init(options);
-
                 }
             })
             //window全局变量

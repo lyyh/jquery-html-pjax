@@ -24,7 +24,7 @@
                 self.onRefresh(function() {
                     window.name = window.location.hash;
                 })
-                
+
                 var wlHref = window.location.href,
                     html = wlHref.substring(wlHref.lastIndexOf('/')),
                     url = wlHref.replace(html, '/' + options.paths + '/' + window.name.replace('#', '') + '.html');
@@ -38,14 +38,13 @@
                 //记录刷新页面之前所在的标签
                 self.onRefresh(function() {
                     var originUrl = window.location.href.replace(window.location.hash, '#' + config.hash)
-                    console.log(originUrl)
                         //记录压入历史栈
                     window.history.pushState({
                         origin: originUrl
                     }, null, url);
                 });
 
-                var url = ''
+                var url = '';
                 if (originUrl.indexOf('.html') >= 0) {
                     url = originUrl.replace(originUrl.substring(originUrl.indexOf('#')), '#' + options.hash);
                     window.location.href = url;
@@ -56,9 +55,10 @@
             //刷新事件
             onRefresh: function(fn) {
                 window.onbeforeunload = function(event) {
-                    var n = window.event.screenX - window.screenLeft;
+                    var e = event || window.event;
+                    var n = e.screenX - window.screenLeft;
                     var b = n > document.documentElement.scrollWidth - 20;
-                    if (b && window.event.clientY < 0 || window.event.altKey) {
+                    if (b && e.clientY < 0 || e.altKey) {
                         // alert("这是一个关闭操作而非刷新");
                     } else {
                         // alert("这是一个刷新操作而非关闭");
@@ -73,7 +73,7 @@
                 //监听点击事件
                 $(options.selector || options.selector).click(function(e) {
                     e.preventDefault();
-                    
+
                     var target = $(this).data('target'),
                         originHash = window.location.href.split('#')[1] || options.hash || config.hash,
                         url = '',
@@ -173,7 +173,7 @@
                     repStr = url.substring(url.indexOf('#'));
                     return repStr;
                 } else {
-                    return null;
+                    return null;s
                 }
             }
         };

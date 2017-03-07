@@ -71,7 +71,9 @@
                 var self = this;
 
                 //监听点击事件
-                $(options.selector || options.selector).click(function() {
+                $(options.selector || options.selector).click(function(e) {
+                    e.preventDefault();
+                    
                     var target = $(this).data('target'),
                         originHash = window.location.href.split('#')[1] || options.hash || config.hash,
                         url = '',
@@ -141,7 +143,6 @@
             },
             //发起ajax请求
             ajaxHandle: function(url, container) {
-                console.log(url)
                 $.ajax({
                         url: url,
                         type: 'get',

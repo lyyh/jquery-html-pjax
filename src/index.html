@@ -46,8 +46,8 @@
         </div>
     </div>
     <script src='jquery.min.js'></script>
-    <!-- <script src="html-pjax.js"></script> -->
-    <script src='../dest/jquery.htmlpjax.min.js'></script>
+    <script src="html-pjax.js"></script>
+    <!-- <script src='../dest/jquery.htmlpjax.min.js'></script> -->
     <script type="text/javascript">
     $.htmlPjax({
         selector: '.page',
@@ -55,6 +55,7 @@
         hash: 'main',
         indexPage: 'index.html',
         paths: './page', //相对于index.html 的路径
+        refreshToIndex: true
     })
     </script>
     </body>

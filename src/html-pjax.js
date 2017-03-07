@@ -19,40 +19,41 @@
 
         pjax = {
             //处理刷新事件
-            refreshHandle: function() {
+            refreshHandle: function(options) {
                 var self = this;
-                onRefresh(function() {
+                self.onRefresh(function() {
 
                 })
             },
             //刷新之后跳转至首页
             refreshToIndex: function(options) {
                 var self = this;
+                //记录刷新页面之前所在的标签
                 self.onRefresh(function() {
-                    var originHash = null,
-                        url = window.location.href;
-
+                    var originUrl = window.location.href.replace(window.location.hash, '#' + config.hash)
                     //记录压入历史栈
-                    // window.history.pushState({
-                    //     origin: originHash
-                    // }, null, url);
+                    window.history.pushState({
+                        origin: originUrl
+                    }, null, url);
                 });
 
-                if ($("#" + options.hash)) {
-                    var url = ''
-                    if (originUrl.indexOf('.html') >= 0) {
-                        url = originUrl.replace(originUrl.substring(originUrl.indexOf('#')), '#' + options.hash);
-                        window.location.href = url;
-                    } else {
-                        window.location.href = originUrl + options.indexPage + '#' + options.hash;
-                    }
+                var url = ''
+                if (originUrl.indexOf('.html') >= 0) {
+                    url = originUrl.replace(originUrl.substring(originUrl.indexOf('#')), '#' + options.hash);
+                    window.location.href = url;
+                } else {
+                    window.location.href = originUrl + options.indexPage + '#' + options.hash;
                 }
             },
             //刷新事件
             onRefresh: function(fn) {
                 window.onbeforeunload = function(event) {
-                    //关闭浏览器
-                    if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {} else { //刷新了页面
+                    var n = window.event.screenX - window.screenLeft;
+                    var b = n > document.documentElement.scrollWidth - 20;
+                    if (b && window.event.clientY < 0 || window.event.altKey) {
+                        // alert("这是一个关闭操作而非刷新");
+                    } else {
+                        // alert("这是一个刷新操作而非关闭");
                         fn();
                     }
                 }
@@ -180,12 +181,12 @@
         //添加静态方法
         $.extend({
                 htmlPjax: function(options) {
-                    var refreshFlag = (typeof options.refreshtoIndex === 'boolean') ? options.refreshToIndex : config.refreshtoIndex;
-
+                    var refreshFlag = (typeof options.refreshToIndex === 'boolean') ? options.refreshToIndex : config.refreshtoIndex;
                     if (refreshFlag) {
-                        pjax.refreshHandle();
-                    } else { //默认刷新回到首页
+                        //默认刷新回到首页
                         pjax.refreshToIndex(options);
+                    } else {
+                        pjax.refreshHandle(options);
                     }
                     pjax.init(options);
                 }

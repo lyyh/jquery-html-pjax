@@ -33,9 +33,9 @@
                         url = window.location.href;
 
                     //记录压入历史栈
-                    window.history.pushState({
-                        origin: originHash
-                    }, null, url);
+                    // window.history.pushState({
+                    //     origin: originHash
+                    // }, null, url);
                 });
 
                 if ($("#" + options.hash)) {
@@ -51,12 +51,11 @@
             //刷新事件
             onRefresh: function(fn) {
                 window.onbeforeunload = function(event) {
-                        //关闭浏览器
-                        if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {
-                        } else { //刷新了页面
-                            fn();
-                        }
+                    //关闭浏览器
+                    if (event.clientX > document.body.clientWidth && event.clientY < 0 || event.altKey) {} else { //刷新了页面
+                        fn();
                     }
+                }
             },
             //初始化
             init: function(options) {
@@ -178,10 +177,12 @@
         module.exports = pjax;
         //jquery
     } else if (jQuery) {
+        //添加静态方法
         $.extend({
                 htmlPjax: function(options) {
-                    options.refreshtoIndex = options.refreshtoIndex || true;
-                    if (!options.refreshtoIndex && !config.refreshtoIndex) {
+                    var refreshFlag = (typeof options.refreshtoIndex === 'boolean') ? options.refreshToIndex : config.refreshtoIndex;
+
+                    if (refreshFlag) {
                         pjax.refreshHandle();
                     } else { //默认刷新回到首页
                         pjax.refreshToIndex(options);

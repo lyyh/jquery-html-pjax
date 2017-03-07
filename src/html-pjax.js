@@ -22,16 +22,24 @@
             refreshHandle: function(options) {
                 var self = this;
                 self.onRefresh(function() {
-
+                    window.name = window.location.hash;
                 })
+                
+                var wlHref = window.location.href,
+                    html = wlHref.substring(wlHref.lastIndexOf('/')),
+                    url = wlHref.replace(html, '/' + options.paths + '/' + window.name.replace('#', '') + '.html');
+
+                self.ajaxHandle(url, options.container);
             },
             //刷新之后跳转至首页
             refreshToIndex: function(options) {
                 var self = this;
+
                 //记录刷新页面之前所在的标签
                 self.onRefresh(function() {
                     var originUrl = window.location.href.replace(window.location.hash, '#' + config.hash)
-                    //记录压入历史栈
+                    console.log(originUrl)
+                        //记录压入历史栈
                     window.history.pushState({
                         origin: originUrl
                     }, null, url);
@@ -133,6 +141,7 @@
             },
             //发起ajax请求
             ajaxHandle: function(url, container) {
+                console.log(url)
                 $.ajax({
                         url: url,
                         type: 'get',
